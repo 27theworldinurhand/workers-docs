@@ -101,6 +101,16 @@ These values are concerned with how your project will be accessed; if Upload Con
       - `http://example.com/hello`
       
       This key is optional if you are using a [workers.dev](https://workers.dev) subdomain and is only required when `workers_dev` is false, or excluded from an [environment](/tooling/wrangler/configuration/environments).
+  - `routes`: A list of routes you'd like to use your worker on. These follow exactly the same rules a `route`, but you can specify a list of them.
+
+    For example:
+
+    ```toml
+    routes = [
+        "http://example.com/hello",
+        "http://example.com/goodbye"
+    ]
+    ```
 
 #### Environments
 

@@ -105,13 +105,14 @@ weight: 2
 
 #### Publishing to your own domain
 
-If you would like to publish to your own domain, you will need to specify these three fields in your `wrangler.toml`.
+  If you would like to publish to your own domain, you will need to specify these three fields in your `wrangler.toml`.
 
-| Key         | Value                                                        | Example                                        |
-| ----------- | ------------------------------------------------------------ | ---------------------------------------------- |
-| workers_dev | false                                                        | `workers_dev = false`                          |
-| route       | The route you would like to publish to                       | `route = "example.com/my-worker/*"`            |
-| zone_id     | Your Cloudflare zone ID, this can be found in the Cloudflare dashboard | `zone_id = "b6558acaf2b4cad1f2b51c5236a6b972"` |
+| Key             | Value                                     | Example                                        |
+| -----------     | ----------------------------------------- | ---------------------------------------------- |
+| zone_id         | Your Cloudflare zone ID*                  | `zone_id = "b6558acaf2b4cad1f2b51c5236a6b972"` |
+| route OR routes | The route(s) you would like to publish to | `route = "example.com/my-worker/*"` or <br /> `routes = ["example.com/foo/*", example.com/bar/*]` |
+
+  *Note: Your Cloudflare Zone ID can be found in the [Cloudflare dashboard](https://dash.cloudflare.com).
 
 #### Publishing the same code to multiple places
 
@@ -151,6 +152,24 @@ If you would like to be able to publish your code to multiple places, please see
   ```
 
   Additionally, you can preview different environments. This is useful if you have different builds for different environments (like staging vs. production), but typically isn't needed. For more information see the [environments documentation](/tooling/wrangler/configuration/environments).
+
+### ➡️ `route`
+
+  List or delete a route associated with a zone:
+
+  ```bash
+  wrangler route list
+  ```
+
+  Will return a json response from the [List Routes API](/tooling/api/routes/#list-routes). Each entry includes the route id, pattern, and associated Worker name for a route. Piping this through a tool such as `jq` will pretty up the output.
+
+  ```bash
+  wrangler route delete longhashedrouteid
+  ```
+
+  Will remove the route specified by the indicated route id. Route IDs can be found by running the list routes command (above).
+
+  Both commands accept a `--env` flag in case you are working on a project that spans zones. For more information see the [environments documentation](/tooling/wrangler/configuration/environments).
 
 ### 🗂️ `kv`
 
