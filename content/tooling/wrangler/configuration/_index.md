@@ -48,11 +48,14 @@ There are two types of configuration that `wrangler` uses: global user and per p
   Note that providing authentication credentials through environment variables will override whatever credentials you configured 
   if you ran `wrangler config`.
 
-### Per Project
+### The `wrangler.toml`
 
   Your project will need to have several things configured before you can publish your worker. These values are stored in a `wrangler.toml` file that `wrangler generate` will make for you. You will need to manually edit this file to add these values before you can publish.
 
-  - `name`: This is the name of your project. It will be the name of your script.
+#### Upload Configuration
+
+These values are required to build and bundle your project for upload:
+
   - `type`: This key tells `wrangler build` how to build your project. There are currently three options (`webpack`, `javascript`, and `rust`), but we expect there to be more as the community grows.
       - `javascript`\*: This project contains a single JavaScript file, defined in `package.json`'s `main` key.
       - `rust`: This project contains a Rust crate that uses `wasm-bindgen`. It will be built with `wasm-pack`.
@@ -60,17 +63,7 @@ There are two types of configuration that `wrangler` uses: global user and per p
           WebAssembly. Rust files will be built with `wasm-pack`.
           This project type uses webpack and webpack plugins in the background to build your worker. You can read more about this type [here](/tooling/wrangler/webpack).
     _\* Note: All Javscript and webpack projects must include a package.json_
-  - `zone_id`: This is the ID of the "zone" or domain you want to run your script on. This is optional if you are using a [workers.dev](https://workers.dev) subdomain and is only required when `workers_dev` is false, or excluded from an [environment](/tooling/wrangler/configuration/environments) configuration.
-  - `account_id`: This is the ID of the account associated with your zone. You might have more than one account, so make sure to use the ID of the account associated with the `zone_id` you provide, if you provide one.
-  - `route`: This is the route you'd like to use your worker on. You need to include the hostname. Examples:
-
-      - `*example.com/*`
-      - `http://example.com/hello`
-      
-      This key is optional if you are using a [workers.dev](https://workers.dev) subdomain and is only required when `workers_dev` is false, or excluded from an [environment](/tooling/wrangler/configuration/environments). 
-
   - `webpack_config`: This is the path to a custom webpack configuration file for your worker. You must specify this field to use a custom webpack configuration, otherwise Wrangler will use a default configuration for you. You can read more [here](/tooling/wrangler/webpack).
-  - `workers_dev`: This is a boolean flag that specifies if your worker will be deployed to your [workers.dev](https://workers.dev) subdomain. For more information, please read the [environments documentation](/tooling/wrangler/configuration/environments).
   - `kv-namespaces`: These specify any [Workers KV](/reference/storage/) Namespaces you want to access from
       inside your Worker. Each namespace you include should have an entry in your `wrangler.toml` that includes:
 
@@ -87,6 +80,27 @@ There are two types of configuration that `wrangler` uses: global user and per p
       ```
 
       Note: Creating your KV Namespaces should be handled using Wrangler's [KV Commands](/tooling/wrangler/kv_commands).
+
+#### Deploy Configuration
+
+These values are concerned with how your project will be accessed; if Upload Configuration is concerned with the "what" of your project, Deploy Configuration is concerned with "where" it is deployed:
+
+  - `name`: This is the name of your project. It will be the name of your script.
+  - `account_id`: This is the ID of the account associated with your zone. You might have more than one account, so make sure to use the ID of the account associated with the `zone_id` you provide, if you provide one.
+
+##### Deploying to your workers.dev subdomain
+
+  - `workers_dev`: This is a boolean flag that specifies if your worker will be deployed to your [workers.dev](https://workers.dev) subdomain. For more information, please read the [environments documentation](/tooling/wrangler/configuration/environments).
+
+##### Deploying to a custom domain
+
+  - `zone_id`: This is the ID of the "zone" or domain you want to run your script on. This is optional if you are using a [workers.dev](https://workers.dev) subdomain and is only required when `workers_dev` is false, or excluded from an [environment](/tooling/wrangler/configuration/environments) configuration.
+  - `route`: This is the route you'd like to use your worker on. You need to include the hostname. Examples:
+
+      - `*example.com/*`
+      - `http://example.com/hello`
+      
+      This key is optional if you are using a [workers.dev](https://workers.dev) subdomain and is only required when `workers_dev` is false, or excluded from an [environment](/tooling/wrangler/configuration/environments).
 
 #### Environments
 
